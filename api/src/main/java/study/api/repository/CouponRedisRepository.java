@@ -16,4 +16,8 @@ public class CouponRedisRepository {
     public Long increment() {
         return redisTemplate.opsForValue().increment(couponCountKey);
     }
+
+    public void deleteAll() {
+        redisTemplate.delete(couponCountKey);
+    }
 }
