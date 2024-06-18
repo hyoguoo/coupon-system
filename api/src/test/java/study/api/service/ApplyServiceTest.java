@@ -112,7 +112,7 @@ class ApplyServiceTest {
     @DisplayName("여러 명이 쿠폰을 발급한다. (Kafka)")
     void apply_with_multiple_users_with_kafka() throws InterruptedException {
         // given
-        final int totalUsers = 1000;
+        final int totalUsers = 3000;
         final int threadCount = 32;
 
         // when

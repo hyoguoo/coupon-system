@@ -12,7 +12,7 @@ import study.api.repository.CouponRepository;
 @RequiredArgsConstructor
 public class ApplyService {
 
-    public static final int MAX_COUPON_LIMIT = 100;
+    public static final int MAX_COUPON_LIMIT = 1000;
     private final CouponRepository couponRepository;
     private final CouponRedisRepository couponRedisRepository;
     private final CouponCreateProducer couponCreateProducer;
