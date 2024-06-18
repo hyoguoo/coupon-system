@@ -9,3 +9,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/coupon_system
     username: root
     password: local59!
+kafka:
+  bootstrap-servers: localhost:9092
+  topic:
+    coupon-create: coupon-create
