@@ -108,6 +108,7 @@ class ApplyServiceTest {
         assertThat(couponRepository.count()).isEqualTo(MAX_COUPON_LIMIT);
     }
 
+    @SuppressWarnings("java:S2925")
     @Test
     @DisplayName("여러 명이 쿠폰을 발급한다. (Kafka)")
     void apply_with_multiple_users_with_kafka() throws InterruptedException {
@@ -135,6 +136,7 @@ class ApplyServiceTest {
 
         countDownLatch.await();
 
+        Thread.sleep(3000);
         // then
         assertThat(couponRepository.count()).isEqualTo(MAX_COUPON_LIMIT);
     }
