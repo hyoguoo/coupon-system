@@ -1,6 +1,7 @@
 package study.api.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -8,10 +9,11 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CouponRedisRepository {
 
-    private static final String COUPON_COUNT = "coupon_count";
     private final RedisTemplate<String, String> redisTemplate;
+    @Value("${redis.key.coupon-count}")
+    private String couponCountKey;
 
     public Long increment() {
-        return redisTemplate.opsForValue().increment(COUPON_COUNT);
+        return redisTemplate.opsForValue().increment(couponCountKey);
     }
 }
