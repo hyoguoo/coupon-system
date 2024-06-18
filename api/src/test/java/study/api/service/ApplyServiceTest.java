@@ -74,6 +74,37 @@ class ApplyServiceTest {
         countDownLatch.await();
 
         // then
+        assertThat(couponRepository.count()).isNotEqualTo(MAX_COUPON_LIMIT);
+    }
+
+    @Test
+    @DisplayName("여러 명이 쿠폰을 발급한다. (Redis)")
+    void apply_with_multiple_users_with_redis() throws InterruptedException {
+        // given
+        final int totalUsers = 1000;
+        final int threadCount = 32;
+
+        // when
+        CountDownLatch countDownLatch;
+
+        try (ExecutorService executorService = Executors.newFixedThreadPool(threadCount)) {
+            countDownLatch = new CountDownLatch(totalUsers);
+
+            for (int i = 0; i < totalUsers; i++) {
+                long userId = i;
+                executorService.submit(() -> {
+                    try {
+                        applyService.applyWithRedisRepository(userId);
+                    } finally {
+                        countDownLatch.countDown();
+                    }
+                });
+            }
+        }
+
+        countDownLatch.await();
+
+        // then
         assertThat(couponRepository.count()).isEqualTo(MAX_COUPON_LIMIT);
     }
 }
