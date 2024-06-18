@@ -16,3 +16,4 @@ kafka:
 redis:
   key:
     coupon-count: coupon_count
+    applied-user: applied_user
