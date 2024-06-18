@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import study.api.repository.AppliedUserRepository;
 import study.api.repository.CouponRedisRepository;
 import study.api.repository.CouponRepository;
 
@@ -26,11 +27,15 @@ class ApplyServiceTest {
     @Autowired
     private CouponRedisRepository couponRedisRepository;
 
+    @Autowired
+    private AppliedUserRepository appliedUserRepository;
+
 
     @BeforeEach
     void setUp() {
         couponRepository.deleteAll();
         couponRedisRepository.deleteAll();
+        appliedUserRepository.deleteAll();
     }
 
     @Test
@@ -139,5 +144,38 @@ class ApplyServiceTest {
         Thread.sleep(3000);
         // then
         assertThat(couponRepository.count()).isEqualTo(MAX_COUPON_LIMIT);
+    }
+
+    @SuppressWarnings("java:S2925")
+    @Test
+    @DisplayName("여러 명이 쿠폰을 발급하면서, 한 명당 한 번만 발급한다. (Kafka)")
+    void apply_with_multiple_users_with_kafka_only_one_coupon() throws InterruptedException {
+        // given
+        final int totalUsers = 3000;
+        final int threadCount = 32;
+
+        // when
+        CountDownLatch countDownLatch;
+        long userId = 1;
+
+        try (ExecutorService executorService = Executors.newFixedThreadPool(threadCount)) {
+            countDownLatch = new CountDownLatch(totalUsers);
+
+            for (int i = 0; i < totalUsers; i++) {
+                executorService.submit(() -> {
+                    try {
+                        applyService.applyKafkaProducerOnlyOneCoupon(userId);
+                    } finally {
+                        countDownLatch.countDown();
+                    }
+                });
+            }
+        }
+
+        countDownLatch.await();
+
+        Thread.sleep(3000);
+        // then
+        assertThat(couponRepository.count()).isEqualTo(1);
     }
 }
