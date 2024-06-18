@@ -6,7 +6,6 @@ import static study.api.service.ApplyService.MAX_COUPON_LIMIT;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,12 +29,6 @@ class ApplyServiceTest {
 
     @BeforeEach
     void setUp() {
-        couponRepository.deleteAll();
-        couponRedisRepository.deleteAll();
-    }
-
-    @AfterEach
-    void tearDown() {
         couponRepository.deleteAll();
         couponRedisRepository.deleteAll();
     }
