@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import study.api.repository.CouponRedisRepository;
 import study.api.repository.CouponRepository;
 
 @SpringBootTest
@@ -23,14 +24,20 @@ class ApplyServiceTest {
     @Autowired
     private CouponRepository couponRepository;
 
+    @Autowired
+    private CouponRedisRepository couponRedisRepository;
+
+
     @BeforeEach
     void setUp() {
         couponRepository.deleteAll();
+        couponRedisRepository.deleteAll();
     }
 
     @AfterEach
     void tearDown() {
         couponRepository.deleteAll();
+        couponRedisRepository.deleteAll();
     }
 
     @Test
